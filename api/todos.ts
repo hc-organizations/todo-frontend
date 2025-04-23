@@ -1,5 +1,3 @@
-import "@/envConfig";
-
 // API 엔드포인트 기본 주소
 const ENDPOINT = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
 

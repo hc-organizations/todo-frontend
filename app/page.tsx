@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getAllTodos } from "@/api/todos";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   // API 함수 사용
   const todosData = await getAllTodos();
