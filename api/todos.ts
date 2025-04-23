@@ -1,5 +1,4 @@
 // API 엔드포인트 기본 주소
-const ENDPOINT = process.env.API_URL || process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 // Todo 타입 정의
 export type Todo = {
@@ -24,7 +23,7 @@ export interface CreateTodoInput {
 
 // 모든 Todo 가져오기
 export async function getAllTodos(): Promise<Todo[]> {
-  const response = await fetch(`${ENDPOINT}/api/v1/todos`);
+  const response = await fetch(`${process.env.API_URL}/api/v1/todos`);
 
   if (!response.ok) {
     throw new Error("할 일 목록을 가져오는데 실패했습니다");
@@ -35,13 +34,16 @@ export async function getAllTodos(): Promise<Todo[]> {
 
 // 새 Todo 생성하기
 export async function createTodo(todoData: CreateTodoInput): Promise<Todo> {
-  const response = await fetch(`${ENDPOINT}/api/v1/todos`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(todoData),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/todos`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todoData),
+    }
+  );
 
   if (!response.ok) {
     throw new Error("할 일을 추가하는데 실패했습니다");
