@@ -12,10 +12,12 @@ RUN yarn install --frozen-lockfile --ignore-engines
 # Build-time variables for embedding into the app
 ARG NEXT_PUBLIC_API_URL
 ARG API_URL
+ARG NEXT_PUBLIC_API_ENDPOINT
 
 # Expose build-time variables as environment variables
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV API_URL=$API_URL
+ENV NEXT_PUBLIC_API_ENDPOINT=$NEXT_PUBLIC_API_ENDPOINT
 
 # Copy source code and run the build
 COPY . .

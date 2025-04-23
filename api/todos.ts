@@ -34,6 +34,7 @@ export async function getAllTodos(): Promise<Todo[]> {
 
 // 새 Todo 생성하기
 export async function createTodo(todoData: CreateTodoInput): Promise<Todo> {
+  console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/todos`,
     {
