@@ -32,6 +32,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            NEXT_PUBLIC_API_ENDPOINT=${{ secrets.NEXT_PUBLIC_API_ENDPOINT }}
           tags: |
             ghcr.io/hc-organizations/todo-frontend:latest
             ghcr.io/hc-organizations/todo-frontend:${{ github.sha }}
