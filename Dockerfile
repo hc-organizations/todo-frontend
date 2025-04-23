@@ -2,33 +2,40 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install dependencies (use npm ci if package-lock.json is present)
-# 시스템 의존성 및 yarn 설치
+# Install system dependencies
 RUN apk add --no-cache libc6-compat
 
-# package 파일 복사
+# Copy package files and install dependencies
 COPY package.json yarn.lock ./
-
-# 의존성 설치 (캐시 활용을 위해 package.json과 yarn.lock만 먼저 복사)
 RUN yarn install --frozen-lockfile --ignore-engines
 
-# Copy source code and build
+# Build-time variables for embedding into the app
+ARG NEXT_PUBLIC_API_URL
+ARG API_URL
+
+# Expose build-time variables as environment variables
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV API_URL=$API_URL
+
+# Copy source code and run the build
 COPY . .
 RUN yarn build
 
-# Stage 2: Run the Next.js app
+# Stage 2: Prepare production runner image
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy the build output and necessary files from builder
+# Copy build artifacts and dependencies
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
-# Set environment to production and expose port
+# Set production environment
 ENV NODE_ENV=production
+
+# Expose the application port
 EXPOSE 3000
 
-# Start the Next.js server (which serves SSR pages)
+# Start the Next.js server
 CMD ["yarn", "start"]
